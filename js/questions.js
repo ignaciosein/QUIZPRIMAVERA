@@ -1,4 +1,4 @@
-let arrayDeDatos = [];
+1let arrayDeDatos = [];
 let todasLasRespuestas = [];
 let allQuestions = [{}];
 
@@ -597,49 +597,42 @@ Respuesta 10 :<div id="res10">${arrayDeDatos[9].respuesta}</div><br>
     let FechaAMeter = fecha + " " + hora;
     preguntaAcierto.push({ fecha: FechaAMeter, aciertos: acertadas });
 
-    localStorage.setItem(`${FechaAMeter}`, JSON.stringify(preguntaAcierto));
+ 
+      let registroPoints = {
+        Fecha: FechaAMeter ,
+        aciertos: acertadas,
+      };
 
-    /////NOS DICE LAS KEY QUE TIENE LOCALSTORE////////////
-    for (
-      FechaAMeter = 0;
-      FechaAMeter <= localStorage.length - 1;
-      FechaAMeter++
-    ) {
-      clave = localStorage.key(FechaAMeter);
 
-      let sacarAPantalla = JSON.parse(localStorage.getItem(clave)); //sale correctamente el objeto */
 
-      console.log(sacarAPantalla);
+      registroDePuntuaciones(registroPoints);
+      //Add datos
 
-      nombreDeKeys.push({
-        key: clave,
-        acierto: sacarAPantalla[10].aciertos,
-      });
 
-      arrancarGrafica(nombreDeKeys);
+
+
+
+
+/ ///////////////ESTA FUNCION INTRODYUCE EL OBJETO EN LA BASE DE DATOS
+      function registroDePuntuaciones(puntosUltimoTest) {
+        db.collection("puntuaciones")/// nomvbre de objeto en la base de datos
+          .add(puntosUltimoTest) 
+          .then((docRef) => {
+            console.log("Document written with ID: ", docRef.id);
+          })
+          .catch((error) => {
+            console.error("Error adding document: ", error);
+          });
+      }
     }
-  }
-}
 
+
+  
 //datos
 let mierda = [];
 
-for (x = 0; x <= localStorage.length - 1; x++) {
-  clave = localStorage.key(x);
-
-  let todo = JSON.parse(localStorage.getItem(clave));
-
-  mierda.push({ fecha: clave, aciertos: todo[0].aciertos });
-}
-
-function arrancarGrafica() {
-  let aciertos = [];
-  let fechas = [];
-
-  mierda.forEach((element) => {
-    aciertos.push(element.aciertos);
-    fechas.push(element.fecha);
-  });
+ 
+ 
 }
 
 arrancarGrafica();

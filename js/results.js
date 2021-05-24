@@ -1,3 +1,9 @@
+
+
+
+
+
+ 
 if (localStorage.length !== 0) {
   document.getElementById("graficaContainer").style.display = "block";
 } else {
@@ -52,3 +58,7 @@ function arrancarGrafica() {
 }
 
 arrancarGrafica();
+
+
+
+ 
