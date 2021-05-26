@@ -1,23 +1,30 @@
+ import {firebaseConfig}  from "./config.js"
+ 
 let arrayDeDatos = [];
-let todasLasRespuestas = [];
-let allQuestions = [{}];
-
-let allAnswers = [{}];
-let arraydeobjetos = [];
-let totales = [];
-let puntuaciones = [];
-let allCorrectas = [];
+ 
 let allQuestions2 = [];
 
 let arrayDeAciertos = [];
-let solucion = [];
-
-let arryKeys = [];
-let nombreDeKeys = [];
+ 
 
 let preguntaAcierto = [];
+ 
 
-let puntos = [];
+
+let pregCorrecta  
+let pregIncorrecta
+let pregTitle
+
+
+
+
+
+
+
+
+
+
+
 ////////////////////////
 const preguntas = async () => {
   let res = await fetch(
@@ -33,7 +40,9 @@ preguntas();
 /////PINTA TODAS LAS PREGUNTAS EN EL ARRAY DE OBJETOS ALLQUESTIONS////////
 function printQuestions(preguntas) {
   for (let index = 0; index < preguntas.results.length; index++) {
+    console.log("Se ha quedao buena tarde")
     pregCorrecta = preguntas.results[index].correct_answer;
+    console.log("fiestaaaa")
     pregIncorrecta = preguntas.results[index].incorrect_answers;
     pregTitle = preguntas.results[index].question;
 
@@ -595,51 +604,44 @@ Respuesta 10 :<div id="res10">${arrayDeDatos[9].respuesta}</div><br>
       hoy.getDate() + "-" + (hoy.getMonth() + 1) + "-" + hoy.getFullYear();
     let hora = hoy.getHours() + ":" + hoy.getMinutes() + ":" + hoy.getSeconds();
     let FechaAMeter = fecha + " " + hora;
+
     preguntaAcierto.push({ fecha: FechaAMeter, aciertos: acertadas });
 
-    localStorage.setItem(`${FechaAMeter}`, JSON.stringify(preguntaAcierto));
 
-    /////NOS DICE LAS KEY QUE TIENE LOCALSTORE////////////
-    for (
-      FechaAMeter = 0;
-      FechaAMeter <= localStorage.length - 1;
-      FechaAMeter++
-    ) {
-      clave = localStorage.key(FechaAMeter);
 
-      let sacarAPantalla = JSON.parse(localStorage.getItem(clave)); //sale correctamente el objeto */
+    firebase.initializeApp(firebaseConfig);
 
-      console.log(sacarAPantalla);
+    var db = firebase.firestore();
 
-      nombreDeKeys.push({
-        key: clave,
-        acierto: sacarAPantalla[10].aciertos,
-      });
+    let puntuacion = {
+      Fecha: FechaAMeter,
+      Aciertos: acertadas,
+   
+    };
 
-      arrancarGrafica(nombreDeKeys);
-    }
-  }
+    ////////SUBIR DATOS A LA NUBE A FIREBASE///////////
+    db.collection("puntuaciones")
+    .add(puntuacion)
+    .then((docRef) => {
+      console.log("Document written with ID: ", docRef.id);
+    })
+    .catch((error) => {
+      console.error("Error adding document: ", error);
+    });
+
+     
+  
+
+
+
 }
+ 
 
-//datos
-let mierda = [];
+  
+     
+ }
 
-for (x = 0; x <= localStorage.length - 1; x++) {
-  clave = localStorage.key(x);
+   
 
-  let todo = JSON.parse(localStorage.getItem(clave));
 
-  mierda.push({ fecha: clave, aciertos: todo[0].aciertos });
-}
-
-function arrancarGrafica() {
-  let aciertos = [];
-  let fechas = [];
-
-  mierda.forEach((element) => {
-    aciertos.push(element.aciertos);
-    fechas.push(element.fecha);
-  });
-}
-
-arrancarGrafica();
+ 
